@@ -1,5 +1,9 @@
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from routes.progress.router import router as progress_router
+
+
+load_dotenv()
 
 app = FastAPI()
 
