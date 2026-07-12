@@ -1,0 +1,32 @@
+# Название рабочего прогресса
+name: Test
+run-name: ${{ github.actor }}
+# События(триггер) рабочего процесса
+on: 
+  push:
+    branches:
+      - '**'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.13']
+    steps:
+      - name: Checkout respository
+        uses: actions/checkout@v4
+
+      - name: Step up python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install uv
+        run: pip install uv
+      
+      - name: Install venv
+        run: uv sync
+      
+      - name: Start Test
+        run: uv run pytest -v
+
