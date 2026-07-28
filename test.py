@@ -25,5 +25,3 @@
 #     return {'item_name': item.name, 'item_id': item_id}
 
 
-
-
