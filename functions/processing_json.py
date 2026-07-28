@@ -50,5 +50,22 @@ def add_progress_user(user_id: str, progress_name: str) -> None:
         vault[user_id][progress_name] = []
     else:
         raise ValueError(f"the user, {user_id}, already has progress, {progress_name}")
-
     write_vault_json(vault)
+
+
+def delete_progress_user(user_id: str, progress_name: str) -> None:
+    """Удаление прогресса у пользователя
+
+    Raises:
+        ValueError: прогресс не найден у пользователя
+        ValueError: пользователь не найден
+    """
+    vault = read_vault_json()
+
+    if is_progress_in_user_id(
+        user_id=user_id, progress_name=progress_name
+    ):  # raise ValueError при отсутствии пользователя
+        del vault[user_id][progress_name]
+        write_vault_json(vault=vault)
+    else:
+        raise ValueError(f"the progress, {progress_name}, not found for the user, {user_id}")
