@@ -1,8 +1,7 @@
 from fastapi import APIRouter
 
 from functions.processing_json import add_progress_user, delete_progress_user, is_user_id_in_vault
-
-from ..types import Answer, ProgressRequest
+from routes.types import Answer, ProgressRequest
 
 router = APIRouter()
 
