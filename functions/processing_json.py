@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import date
 
 
 def read_vault_json() -> dict:
@@ -91,3 +92,27 @@ def delete_progress_user(user_id: str, progress_name: str) -> None:
         write_vault_json(vault=vault)  # raise ValueError при пустой ссылки на БД
     else:
         raise ValueError(f"the progress, {progress_name}, not found for the user, {user_id}")
+
+
+def add_ready_user_progress(user_id: str, progress_name: str) -> None:
+    """Добавляем отметку (сегодняшнию дату) в список прогресса
+    
+    Raises:
+        ValueError: если url БД не существует
+        ValueError: пользователь не найден
+        ValueError: сегдяншяя дату уже добалена
+    """
+    vault = read_vault_json()  # raise ValueError при пустой ссылки на БД
+    if user_id not in vault:
+        raise ValueError(f"user id, {user_id}, not found")
+    if progress_name not in vault[user_id]:
+        raise ValueError(f"the progress, {progress_name}, not found for the user, {user_id}")
+
+    today = date.today().strftime("%d.%m.%Y")
+    if today in vault[user_id][progress_name]:
+        raise ValueError(
+            f"Today's progress, {progress_name}, is already marked for user, {user_id}"
+        )
+
+    vault[user_id][progress_name].append(today)
+    write_vault_json(vault=vault)
