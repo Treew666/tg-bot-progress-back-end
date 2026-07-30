@@ -96,7 +96,7 @@ def delete_progress_user(user_id: str, progress_name: str) -> None:
 
 def add_ready_user_progress(user_id: str, progress_name: str) -> None:
     """Добавляем отметку (сегодняшнию дату) в список прогресса
-    
+
     Raises:
         ValueError: если url БД не существует
         ValueError: пользователь не найден
