@@ -38,4 +38,3 @@ async def delete_progress(user_id: str, progress_name: str) -> Answer:
         )
     except ValueError as valueError:
         return Answer(status_code=400, info=str(valueError))
-        
