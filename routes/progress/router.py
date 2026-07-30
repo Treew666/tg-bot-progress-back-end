@@ -1,8 +1,7 @@
 from fastapi import APIRouter
 
 from functions.processing_json import add_progress_user, delete_progress_user, is_user_id_in_vault
-
-from ..types import Answer, ProgressRequest
+from routes.types import Answer, ProgressRequest
 
 router = APIRouter()
 
@@ -29,14 +28,13 @@ async def add_progress(user_id: str, body: ProgressRequest) -> Answer:
 @router.delete("/{user_id}/{progress_name}")
 async def delete_progress(user_id: str, progress_name: str) -> Answer:
     """Удаление прогресса"""
-    if is_user_id_in_vault(user_id=user_id):
-        try:
-            delete_progress_user(user_id=user_id, progress_name=progress_name)
-            return Answer(
-                status_code=200,
-                info=f"succesful delete progress, {progress_name}, for user, {user_id}",
-            )
-        except ValueError as valueError:
-            return Answer(status_code=400, info=str(valueError))
-    else:
+    if not is_user_id_in_vault(user_id=user_id):
         return Answer(status_code=400, info=f"the user, {user_id}, not found")
+    try:
+        delete_progress_user(user_id=user_id, progress_name=progress_name)
+        return Answer(
+            status_code=200,
+            info=f"succesful delete progress, {progress_name}, for user, {user_id}",
+        )
+    except ValueError as valueError:
+        return Answer(status_code=400, info=str(valueError))
