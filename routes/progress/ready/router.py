@@ -1,6 +1,10 @@
 from fastapi import APIRouter
 
-from functions.processing_json import is_progress_in_user_id, is_user_id_in_vault, add_ready_user_progress
+from functions.processing_json import (
+    add_ready_user_progress,
+    is_progress_in_user_id,
+    is_user_id_in_vault,
+)
 from routes.types import Answer, ProgressRequest
 
 router = APIRouter()
