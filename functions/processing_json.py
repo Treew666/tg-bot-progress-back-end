@@ -97,6 +97,7 @@ def delete_progress_user(user_id: str, progress_name: str) -> None:
 
 DateString = NewType("DateString", str)
 
+
 def add_ready_user_progress(user_id: str, progress_name: str) -> DateString:
     """Добавляем отметку (сегодняшнию дату) в список прогресса
 

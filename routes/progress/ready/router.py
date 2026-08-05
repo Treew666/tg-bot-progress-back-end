@@ -22,6 +22,9 @@ async def ready_progress(user_id: str, body: ProgressRequest) -> Answer:
         )
     try:
         today = add_ready_user_progress(user_id=user_id, progress_name=progress_name)
-        return Answer(status_code=200, info=f"successful add today date, {today}, in progress, {progress_name}, for user, {user_id}")
+        return Answer(
+            status_code=200,
+            info=f"successful add today date, {today}, in progress, {progress_name}, for user, {user_id}",
+        )
     except ValueError as valueError:
         return Answer(status_code=400, info=str(valueError))
