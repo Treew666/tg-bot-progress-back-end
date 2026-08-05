@@ -1,6 +1,7 @@
 import json
 import os
 from datetime import date
+from typing import NewType
 
 
 def read_vault_json() -> dict:
@@ -94,13 +95,22 @@ def delete_progress_user(user_id: str, progress_name: str) -> None:
         raise ValueError(f"the progress, {progress_name}, not found for the user, {user_id}")
 
 
-def add_ready_user_progress(user_id: str, progress_name: str) -> None:
+DateString = NewType("DateString", str)
+
+def add_ready_user_progress(user_id: str, progress_name: str) -> DateString:
     """Добавляем отметку (сегодняшнию дату) в список прогресса
 
+    Args:
+        user_id: id пользователя в БД.
+        progress_name: название прогресса в БД.
+
+    Returns:
+        DateString: сегодняшняя дата в формате DD.MM.YYYY, которая была добавлена в список прогресса.
+
     Raises:
-        ValueError: если url БД не существует
-        ValueError: пользователь не найден
-        ValueError: сегдяншяя дату уже добалена
+        ValueError: если url БД не существует.
+        ValueError: пользователь не найден.
+        ValueError: сегодяншяя дату уже добалена.
     """
     vault = read_vault_json()  # raise ValueError при пустой ссылки на БД
     if user_id not in vault:
@@ -116,3 +126,4 @@ def add_ready_user_progress(user_id: str, progress_name: str) -> None:
 
     vault[user_id][progress_name].append(today)
     write_vault_json(vault=vault)
+    return DateString(today)
