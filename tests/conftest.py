@@ -1,10 +1,14 @@
+import datetime
 import json
 import os
 
 import pytest
 
 TEST_VAULT = {
-    "1101": {"progress1": ["20.06.2020", "21.06.2020"], "progress2": []},
+    "1101": {
+        "progress1": ["20.06.2020", "21.06.2020"],
+        "progress2": [datetime.date.today().strftime("%d.%m.%Y")],
+    },
     "1102": {"progress1": []},
 }
 
