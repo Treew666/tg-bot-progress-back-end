@@ -24,8 +24,8 @@ async def test_add_progress(user_id: str, progress_name: str, status_code: int) 
     [
         ("1101", "progress1", 200),
         ("1101", "progress4", 400),
-        ("1109", "progress3", 400),
         ("1102", "progress1", 200),
+        ("1109", "progress3", 400),
     ],
 )
 async def test_delete_progress(user_id: str, progress_name: str, status_code: int) -> None:
