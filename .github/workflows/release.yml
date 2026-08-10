@@ -25,7 +25,7 @@ jobs:
         run: pip install uv
 
       - name: Install dependencies
-        run: uv sync
+        run: uv sync --no-group dev
 
       - name: Run tests
         run: uv run pytest -v
@@ -50,19 +50,19 @@ jobs:
         run: docker push ghcr.io/${{ github.repository }}:${{ github.ref_name }}
 
       - name: Save Docker image as .tar
-        run: docker save -o tg-bot-progress.tar ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+        run: docker save -o tg-bot-progress-back-end.tar ghcr.io/${{ github.repository }}:${{ github.ref_name }}
 
       - name: Create .zip archive
-        run: zip -r tg-bot-progress.zip . -x ".git/*" ".venv/*" "*.tar"
+        run: zip -r tg-bot-progress-back-end.zip . -x ".git/*" ".venv/*" "*.tar"
 
       - name: Create .tar.gz archive
-        run: tar -czf tg-bot-progress.tar.gz --exclude=".git" --exclude=".venv" .
+        run: tar -czf tg-bot-progress-back-end.tar.gz --exclude=".git" --exclude=".venv" .
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
           files: |
-            tg-bot-progress.tar
-            tg-bot-progress.zip
-            tg-bot-progress.tar.gz
+            tg-bot-progress-back-end.tar
+            tg-bot-progress-back-end.zip
+            tg-bot-progress-back-end.tar.gz
