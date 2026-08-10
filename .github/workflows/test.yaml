@@ -34,13 +34,11 @@ jobs:
         run: uv run ruff format --check .
       
       - name: Run mypy
-        run: uv run mypy app/
+        run: uv run mypy ./
+
   
   test:
     needs: lint
-
-    needs: lint
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
