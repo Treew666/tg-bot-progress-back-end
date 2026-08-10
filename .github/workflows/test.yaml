@@ -24,7 +24,7 @@ jobs:
       - name: Install uv
         run: pip install uv
       
-      - name: Install venv
+      - name: Install dependencies
         run: uv sync --dev
 
       - name: Run ruff check
@@ -35,10 +35,10 @@ jobs:
       
       - name: Run mypy
         run: uv run mypy ./
+
   
   test:
     needs: lint
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -55,8 +55,8 @@ jobs:
       - name: Install uv
         run: pip install uv
       
-      - name: Install venv
+      - name: Install dependencies
         run: uv sync
       
-      - name: Start Test
+      - name: Start tests
         run: uv run pytest -v
