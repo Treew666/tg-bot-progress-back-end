@@ -2,9 +2,9 @@ from fastapi import APIRouter
 
 from functions.processing_json import (
     add_ready_user_progress,
+    delete_ready_user_progress,
     is_progress_in_user_id,
     is_user_id_in_vault,
-    delete_ready_user_progress,
 )
 from routes.types import Answer, ProgressRequest
 
