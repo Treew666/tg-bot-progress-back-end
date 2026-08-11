@@ -3,32 +3,15 @@ run-name: ${{ github.actor }}
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - release
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.13']
-    steps:
-      - name: Checkout respository
-        uses: actions/checkout@v4
-
-      - name: Set up python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Install uv
-        run: pip install uv
-
-      - name: Install dependencies
-        run: uv sync --no-group dev
-
-      - name: Run tests
-        run: uv run pytest -v
+    uses: ./.github/workflows/test.yaml
+  
+  security:
+    uses: ./.github/workflows/security.yaml
 
   release:
     runs-on: ubuntu-latest
@@ -40,17 +23,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Get version
+        run: echo "VERSION=$(grep version pyproject.toml | head -1 | tr -d '"' | awk '{print $3}')" >> $GITHUB_ENV
+
       - name: Log in to GitHub Packages
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ github.repository }}:${{ github.ref_name }} .
+        run: docker build -t ghcr.io/${{ github.repository }}:v${{ env.VERSION }} .
 
       - name: Push to GitHub Packages
-        run: docker push ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+        run: docker push ghcr.io/${{ github.repository }}:v${{ env.VERSION }}
 
       - name: Save Docker image as .tar
-        run: docker save -o tg-bot-progress-back-end.tar ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+        run: docker save -o tg-bot-progress-back-end.tar ghcr.io/${{ github.repository }}:v${{ env.VERSION }}
 
       - name: Create .zip archive
         run: zip -r tg-bot-progress-back-end.zip . -x ".git/*" ".venv/*" "*.tar"
@@ -61,7 +47,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
+          tag_name: v${{ env.VERSION }}
           files: |
             tg-bot-progress-back-end.tar
             tg-bot-progress-back-end.zip
