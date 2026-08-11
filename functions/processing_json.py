@@ -156,12 +156,13 @@ def add_ready_user_progress(user_id: str, progress_name: str) -> DateString:
     Raises:
         ValueError: url БД пустой или не правильный.
         ValueError: пользователь не найден.
+        ValueError: прогресс у пользователя не найден.
         ValueError: сегодяншяя дату уже добалена.
     """
     vault = read_vault_json()  # raise ValueError
-    if user_id not in vault:
+    if not is_user_id_in_vault(user_id=user_id):
         raise ValueError(f"User id, {user_id}, not found.")
-    if progress_name not in vault[user_id]:
+    if not is_progress_in_user_id(user_id=user_id, progress_name=progress_name):
         raise ValueError(f"The progress, {progress_name}, not found for the user, {user_id}.")
 
     today = date.today().strftime("%d.%m.%Y")
@@ -171,5 +172,38 @@ def add_ready_user_progress(user_id: str, progress_name: str) -> DateString:
         )
 
     vault[user_id][progress_name].append(today)
+    write_vault_json(vault=vault)
+    return DateString(today)
+
+
+def delete_ready_user_progress(user_id: str, progress_name: str) -> DateString:
+    """Удаляет отметку (сугодняшнюю дату) в списке прогресса
+    
+    Args:
+        user_id: строковое значение id пользователя.
+        progress_name: строковое значение имени прогресса.
+    
+    Returns:
+        DateString: сегодняшняя дата в формате DD.MM.YYYY, которая была добавлена в список прогресса.
+
+    Raises:
+        ValueError: url БД пустой или не правильный.
+        ValueError: пользователь не найден.
+        ValueError: прогресс у пользователя не найден.
+        ValueError: сегодяншяя дата еще не добалена.
+    """
+    vault = read_vault_json()  # raises ValuError
+    if not is_user_id_in_vault(user_id=user_id):
+        raise ValueError(f"User id, {user_id}, not found.")
+    if not is_progress_in_user_id(user_id=user_id, progress_name=progress_name):
+        raise ValueError(f"The progress, {progress_name}, not found for the user, {user_id}.")
+
+    today = date.today().strftime("%d.%m.%Y")
+    if today not in vault[user_id][progress_name]:
+        raise ValueError(
+            f"Today's progress, {progress_name}, is not marked for user, {user_id}."
+        )
+
+    vault[user_id][progress_name].remove(today)
     write_vault_json(vault=vault)
     return DateString(today)
