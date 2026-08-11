@@ -1,0 +1,57 @@
+name: Release
+run-name: ${{ github.actor }}
+
+on:
+  push:
+    branches:
+      - release
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yaml
+  
+  security:
+    uses: ./.github/workflows/security.yaml
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [test, security]
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get version
+        run: echo "VERSION=$(grep version pyproject.toml | head -1 | tr -d '"' | awk '{print $3}')" >> $GITHUB_ENV
+
+      - name: Log in to GitHub Packages
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t ghcr.io/${{ github.repository }}:v${{ env.VERSION }} .
+
+      - name: Push to GitHub Packages
+        run: docker push ghcr.io/${{ github.repository }}:v${{ env.VERSION }}
+
+      - name: Save Docker image as .tar
+        run: docker save -o tg-bot-progress-back-end.tar ghcr.io/${{ github.repository }}:v${{ env.VERSION }}
+
+      - name: Create .zip archive
+        run: zip -r tg-bot-progress-back-end.zip . -x ".git/*" ".venv/*" "*.tar"
+
+      - name: Create .tar.gz archive
+        run: tar -czf tg-bot-progress-back-end.tar.gz --exclude=".git" --exclude=".venv" .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.VERSION }}
+          files: |
+            tg-bot-progress-back-end.tar
+            tg-bot-progress-back-end.zip
+            tg-bot-progress-back-end.tar.gz
