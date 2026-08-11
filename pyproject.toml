@@ -17,8 +17,10 @@ asyncio_mode = "auto"
 
 [dependency-groups]
 dev = [
+    "bandit>=1.9.4",
     "mypy",
     "ruff",
+    "safety>=3.8.1",
 ]
 
 [tool.ruff]
