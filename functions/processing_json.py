@@ -178,11 +178,11 @@ def add_ready_user_progress(user_id: str, progress_name: str) -> DateString:
 
 def delete_ready_user_progress(user_id: str, progress_name: str) -> DateString:
     """Удаляет отметку (сугодняшнюю дату) в списке прогресса
-    
+
     Args:
         user_id: строковое значение id пользователя.
         progress_name: строковое значение имени прогресса.
-    
+
     Returns:
         DateString: сегодняшняя дата в формате DD.MM.YYYY, которая была добавлена в список прогресса.
 
@@ -200,9 +200,7 @@ def delete_ready_user_progress(user_id: str, progress_name: str) -> DateString:
 
     today = date.today().strftime("%d.%m.%Y")
     if today not in vault[user_id][progress_name]:
-        raise ValueError(
-            f"Today's progress, {progress_name}, is not marked for user, {user_id}."
-        )
+        raise ValueError(f"Today's progress, {progress_name}, is not marked for user, {user_id}.")
 
     vault[user_id][progress_name].remove(today)
     write_vault_json(vault=vault)
