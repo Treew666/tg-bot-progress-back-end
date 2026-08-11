@@ -6,6 +6,9 @@ on:
     branches:
       - release
 
+permissions:
+  contents: read
+
 jobs:
   test:
     uses: ./.github/workflows/test.yaml
