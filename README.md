@@ -1,5 +1,5 @@
 # tg-bot-progress-back-end
-<h2>Проект бэкенд части для бота по отслеживанию прогресса на питоне.</h2>
+<h2>Проект бэкенд часть для бота по отслеживанию прогресса на питоне.</h2>
 <div align="center">
 <h3>Использовались технологии</h3>
   <div>
@@ -33,10 +33,21 @@
 
 ## Запуск через Docker
 ### Через GitHub Packages
-`docker pull ghcr.io/Treew666/tg-bot-progress-back-end`
+`docker pull ghcr.io/treew666/tg-bot-progress-back-end:{{ версия докера }}` \
+Пример: \
+`docker pull ghcr.io/treew666/tg-bot-progress-back-end:v0.1.0`
+
+Запуск: \
+`docker run -e URL_VAULT={{ место, куда расположить БД }} ghcr.io/treew666/tg-bot-progress-back-end:v0.1.0` \
+Пример: \
+`docker run -e URL_VAULT=./vaults/vault.json ghcr.io/treew666/tg-bot-progress-back-end:v0.1.0`
+
 ### Через .tar из релиза
-1) Скачиваем архив .tar
-2) Запускаем `docker load -i tg-bot-progress.tar`
+1) Скачиваем архив `tg-bot-progress-back-end.tar` из релиза
+2) Запускаем `docker load -i tg-bot-progress-back-end.tar`
+3) Запускаем `docker run -e URL_VAULT={{ место, куда расположить БД }} tg-bot-progress-back-end` \
+Пример: \
+`docker run -e URL_VAULT=./vaults/vault.json tg-bot-progress-back-end`
 
 ## Запуск проекта
 ### Копируем проект
