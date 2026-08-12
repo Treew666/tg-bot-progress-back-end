@@ -33,13 +33,16 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ github.repository }}:v${{ env.VERSION }} .
-
+        run: |
+          IMAGE_NAME=$(echo "ghcr.io/${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          docker build -t $IMAGE_NAME:v${{ env.VERSION }} .
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+      
       - name: Push to GitHub Packages
-        run: docker push ghcr.io/${{ github.repository }}:v${{ env.VERSION }}
-
+        run: docker push ${{ env.IMAGE_NAME }}:v${{ env.VERSION }}
+      
       - name: Save Docker image as .tar
-        run: docker save -o tg-bot-progress-back-end.tar ghcr.io/${{ github.repository }}:v${{ env.VERSION }}
+        run: docker save -o tg-bot-progress-back-end.tar ${{ env.IMAGE_NAME }}:v${{ env.VERSION }}
 
       - name: Create .zip archive
         run: zip -r tg-bot-progress-back-end.zip . -x ".git/*" ".venv/*" "*.tar"
