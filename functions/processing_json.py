@@ -184,7 +184,7 @@ def delete_ready_user_progress(user_id: str, progress_name: str) -> DateString:
         progress_name: строковое значение имени прогресса.
 
     Returns:
-        DateString: сегодняшняя дата в формате DD.MM.YYYY, которая была добавлена в список прогресса.
+        DateString: сегодняшняя дата в формате DD.MM.YYYY, которая была удалена из списока прогресса.
 
     Raises:
         ValueError: url БД пустой или не правильный.
