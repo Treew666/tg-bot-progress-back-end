@@ -45,8 +45,8 @@
 ### Через .tar из релиза
 1) Скачиваем архив `tg-bot-progress-back-end.tar` из релиза
 2) Запускаем `docker load -i tg-bot-progress-back-end.tar`
-3) Запускаем `docker run -e URL_VAULT={{ место, куда расположить БД }} tg-bot-progress-back-end` \
-Пример: \
+3) Запускаем `docker run -e URL_VAULT={{ место, куда расположить БД }} tg-bot-progress-back-end`
+Пример:
 `docker run -e URL_VAULT=./vaults/vault.json tg-bot-progress-back-end`
 
 ## Запуск проекта
