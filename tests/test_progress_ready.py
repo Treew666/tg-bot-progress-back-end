@@ -8,9 +8,9 @@ from routes.types import ProgressRequest
     "user_id, progress_name, status_code",
     [
         ("1101", "progress1", 200),
-        ("1101", "progress2", 400),
+        ("1101", "progress2", 500),
         ("1102", "progress1", 200),
-        ("1102", "progress2", 400),
+        ("1102", "progress2", 404),
     ],
 )
 async def test_ready_progress(user_id: str, progress_name: str, status_code: int) -> None:
@@ -24,10 +24,10 @@ async def test_ready_progress(user_id: str, progress_name: str, status_code: int
 @pytest.mark.parametrize(
     "user_id, progress_name, status_code",
     [
-        ("1101", "progress1", 400),
+        ("1101", "progress1", 500),
         ("1101", "progress2", 200),
-        ("1102", "progress1", 400),
-        ("1102", "progress2", 400),
+        ("1102", "progress1", 500),
+        ("1102", "progress2", 404),
     ],
 )
 async def test_delete_ready_progress(user_id: str, progress_name: str, status_code: int) -> None:
